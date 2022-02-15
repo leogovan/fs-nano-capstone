@@ -4,5 +4,7 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"python.analysis.extraPaths": ["backend/venv/lib/python3.9/site-packages"]
+	}
 }
