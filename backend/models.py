@@ -25,6 +25,8 @@ class Movie(db.Model):
     genre = Column(String(40), nullable=False)
     release_date = Column(Date, nullable=False)
     director = Column(String(40), nullable=False)
+    commitments = db.relationship('Commitment', backref='movies', lazy=True, cascade='all, delete-orphan')
+    roles = db.relationship('Role', backref='movies', lazy=True, cascade='all, delete-orphan')
 
 
 class Actor(db.Model):
@@ -36,6 +38,7 @@ class Actor(db.Model):
     age = Column(String(3), nullable=False)
     gender = Column(String(1), nullable=False)
     image_link = Column(String(500), nullable=False)
+    commitments = db.relationship('Commitment', backref='actors', lazy=True, cascade='all, delete-orphan')
 
 
 class Commitment(db.Model):
@@ -46,7 +49,7 @@ class Commitment(db.Model):
     end_date = Column(Date, nullable=False)
     movie_id = Column(Integer, ForeignKey('movies.id'), nullable=False)
     actor_id = Column(Integer, ForeignKey('actors.id'), nullable=False)
-    role_id = Column(Integer, ForeignKey('roles.id'), nullable=False)
+    role_type_id = Column(Integer, ForeignKey('role_types.id'), nullable=False)
 
 
 class Role(db.Model):
@@ -63,3 +66,5 @@ class RoleType(db.Model):
 
     id = Column(Integer, primary_key=True)
     type = Column(String(40), nullable=False)
+    commitments = db.relationship('Commitment', backref='role_types', lazy=True, cascade='all, delete-orphan')
+    roles = db.relationship('Role', backref='role_types', lazy=True, cascade='all, delete-orphan')

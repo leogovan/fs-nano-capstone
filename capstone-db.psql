@@ -21,22 +21,22 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: role_type_map; Type: TABLE; Schema: public; Owner: leogovan
+-- Name: role_types; Type: TABLE; Schema: public; Owner: leogovan
 --
 
-CREATE TABLE public.role_type_map (
+CREATE TABLE public.role_types (
     id integer NOT NULL,
     role_type character varying(20) NOT NULL
 );
 
 
-ALTER TABLE public.role_type_map OWNER TO leogovan;
+ALTER TABLE public.role_types OWNER TO leogovan;
 
 --
--- Name: role_type_map_id_seq; Type: SEQUENCE; Schema: public; Owner: leogovan
+-- Name: role_types_id_seq; Type: SEQUENCE; Schema: public; Owner: leogovan
 --
 
-CREATE SEQUENCE public.role_type_map_id_seq
+CREATE SEQUENCE public.role_types_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -45,27 +45,27 @@ CREATE SEQUENCE public.role_type_map_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.role_type_map_id_seq OWNER TO leogovan;
+ALTER TABLE public.role_types_id_seq OWNER TO leogovan;
 
 --
--- Name: role_type_map_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: leogovan
+-- Name: role_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: leogovan
 --
 
-ALTER SEQUENCE public.role_type_map_id_seq OWNED BY public.role_type_map.id;
-
-
---
--- Name: role_type_map id; Type: DEFAULT; Schema: public; Owner: leogovan
---
-
-ALTER TABLE ONLY public.role_type_map ALTER COLUMN id SET DEFAULT nextval('public.role_type_map_id_seq'::regclass);
+ALTER SEQUENCE public.role_types_id_seq OWNED BY public.role_types.id;
 
 
 --
--- Data for Name: role_type_map; Type: TABLE DATA; Schema: public; Owner: leogovan
+-- Name: role_types id; Type: DEFAULT; Schema: public; Owner: leogovan
 --
 
-COPY public.role_type_map (id, role_type) FROM stdin;
+ALTER TABLE ONLY public.role_types ALTER COLUMN id SET DEFAULT nextval('public.role_types_id_seq'::regclass);
+
+
+--
+-- Data for Name: role_types; Type: TABLE DATA; Schema: public; Owner: leogovan
+--
+
+COPY public.role_types (id, role_type) FROM stdin;
 1	star
 2	co-star
 3	supporting
@@ -75,18 +75,18 @@ COPY public.role_type_map (id, role_type) FROM stdin;
 
 
 --
--- Name: role_type_map_id_seq; Type: SEQUENCE SET; Schema: public; Owner: leogovan
+-- Name: role_types_id_seq; Type: SEQUENCE SET; Schema: public; Owner: leogovan
 --
 
-SELECT pg_catalog.setval('public.role_type_map_id_seq', 5, true);
+SELECT pg_catalog.setval('public.role_types_id_seq', 5, true);
 
 
 --
--- Name: role_type_map role_type_map_pkey; Type: CONSTRAINT; Schema: public; Owner: leogovan
+-- Name: role_types role_types_pkey; Type: CONSTRAINT; Schema: public; Owner: leogovan
 --
 
-ALTER TABLE ONLY public.role_type_map
-    ADD CONSTRAINT role_type_map_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.role_types
+    ADD CONSTRAINT role_types_pkey PRIMARY KEY (id);
 
 
 --
