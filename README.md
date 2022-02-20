@@ -23,7 +23,7 @@ pip install -r requirements.txt
 ### Create the Database
 With Postgres running, create a new database:
 ```bash
-creadtdb fs-capstone
+createdb fs-capstone
 ```
 
 ### Creating the Tables
