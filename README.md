@@ -1,5 +1,7 @@
 # Readme
 
+
+
 ## Pre-requisites
 ### Python and Postgres
 You will need Python3 installed. While this app was originally written with v3.9, it should work with 3.7 and beyond.
@@ -20,6 +22,9 @@ pip install -r requirements.txt
 ```
 
 ## Database
+### Database Model
+![Casting Agency ERD](https://lucid.app/publicSegments/view/7a26424c-f3d3-4d5c-bd7b-c6a80e2d3521/image.jpeg)
+
 ### Create the Database
 With Postgres running, create a new database:
 ```bash
