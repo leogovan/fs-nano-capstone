@@ -1,16 +1,74 @@
+#----------------------------------------------------------------------------#
+# Imports
+#----------------------------------------------------------------------------#
+
 import os
-from flask import Flask, request, abort, jsonify
+import json
+from flask import Flask, json, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
+from models import setup_db, Movie, Actor, RoleType, Role, Commitment
 
-def create_app(test_config=None):
-  # create and configure the app
-  app = Flask(__name__)
-  CORS(app)
+#----------------------------------------------------------------------------#
+# Setup
+#----------------------------------------------------------------------------#
 
-  return app
+app = Flask(__name__)
+setup_db(app)
 
-APP = create_app()
+CORS(app)
 
-if __name__ == '__main__':
-    APP.run(host='0.0.0.0', port=8080, debug=True)
+#----------------------------------------------------------------------------#
+# Routes
+#----------------------------------------------------------------------------#
+
+"""
+TODO
+Get movies
+"""
+
+@app.route('/movies', methods=['GET'])
+def get_movies():
+	selection = Movie.query.all()
+
+	movies = []
+
+	for movie in selection:
+		movies.append(movie.format())
+
+	# Combo of .loads and .dumps strips out the '\' that was occuring for every value
+	movies = json.loads(json.dumps(movies))
+
+	return jsonify({
+		'success': True,
+		'movies': movies,
+		'total_movies': len(selection)
+	})
+
+
+"""
+TODO
+Get actors
+"""
+
+@app.route('/actors', methods=['GET'])
+def get_actors():
+	pass
+
+"""
+TODO
+Get roles
+"""
+
+@app.route('/roles', methods=['GET'])
+def get_roles():
+	pass
+
+"""
+TODO
+Get commitments
+"""
+
+@app.route('/commitments', methods=['GET'])
+def get_commitments():
+	pass
