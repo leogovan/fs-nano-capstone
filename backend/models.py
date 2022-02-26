@@ -32,10 +32,39 @@ def setup_db(app, database_path=database_path):
     db.create_all()
 
 #----------------------------------------------------------------------------#
+# Super Class for Models
+#----------------------------------------------------------------------------#
+
+class Operations:
+    def __init__(self) -> None:
+        pass
+
+    def flush(self):
+        db.session.add(self)
+        db.session.flush()
+        print('Flushed! You can now grab the ID before it is updated to the DB')
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+        print('Inserted!')
+    
+    def update(self):
+        db.session.commit()
+        print('Updated!')
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+    
+    def undo(self):
+        db.session.rollback()
+
+#----------------------------------------------------------------------------#
 # Models
 #----------------------------------------------------------------------------#
 
-class Movie(db.Model):
+class Movie(db.Model, Operations):
     __tablename__ = 'movies'
 
     movie_id = Column(Integer, primary_key=True)
@@ -46,13 +75,13 @@ class Movie(db.Model):
     commitments = db.relationship('Commitment', backref='movies', lazy=True, cascade='all, delete-orphan')
     roles = db.relationship('Role', backref='movies', lazy=True, cascade='all, delete-orphan')
 
-    def __init__(self, movie_name, genre, release_date, director, commitments, roles):
+    def __init__(self, movie_name, genre, release_date, director):
+        Operations.__init__(self)
         self.movie_name = movie_name
         self.genre = genre
         self.release_date = release_date
         self.director = director
-        self.commitments = commitments
-        self.roles = roles
+    
     
     def format(self):
         return {
@@ -61,12 +90,10 @@ class Movie(db.Model):
             'genre': self.genre,
             'release_date': self.release_date,
             'director': self.director
-            #'commitments': self.commitments,
-            #'roles': self.roles
         }
 
 
-class Actor(db.Model):
+class Actor(db.Model, Operations):
     __tablename__ = 'actors'
 
     actor_id = Column(Integer, primary_key=True)
@@ -78,12 +105,12 @@ class Actor(db.Model):
     commitments = db.relationship('Commitment', backref='actors', lazy=True, cascade='all, delete-orphan')
 
     def __init__(self, actor_name, phone, age, gender, image_link, commitments):
+        Operations.__init__(self)
         self.actor_name = actor_name
         self.phone = phone
         self.age = age
         self.gender = gender
         self.image_link = image_link
-        self.commitments = commitments
     
     def format(self):
         return {
@@ -91,12 +118,11 @@ class Actor(db.Model):
             'actor_name': self.actor_name,
             'age': self.age,
             'gender': self.gender,
-            'image_link': self.image_link,
-            'commitments': self.commitments
+            'image_link': self.image_link
         }
 
 
-class Commitment(db.Model):
+class Commitment(db.Model, Operations):
     __tablename__ = 'commitments'
 
     commitment_id = Column(Integer, primary_key=True)
@@ -124,7 +150,7 @@ class Commitment(db.Model):
         }
 
 
-class Role(db.Model):
+class Role(db.Model, Operations):
     __tablename__ = 'roles'
 
     role_id = Column(Integer, primary_key=True)
@@ -141,7 +167,6 @@ class Role(db.Model):
         return {
             'role_id': self.role_id,
             'number': self.role_number,
-            'end_date': self.end_date,
             'movie_id': self.movie_id,
             'role_type_id': self.role_type_id
         }
@@ -157,13 +182,9 @@ class RoleType(db.Model):
 
     def __init__(self, role_type, commitments, roles):
         self.role_type = role_type
-        self.commitments = commitments
-        self.roles = roles
 
     def format(self):
         return {
             'role_types_id': self.role_types_id,
-            'role_type': self.role_type,
-            'commitments': self.commitments,
-            'roles': self.roles
+            'role_type': self.role_type
         }
