@@ -26,57 +26,83 @@ CORS(app)
 #----------------------------------------------------------------------------#
 
 """
-Get movies
+Get and Create movies
 """
 
-@app.route('/movies', methods=['GET'])
-def get_movies():
-	selection = Movie.query.all()
-
-	movies = []
-
-	for movie in selection:
-		movies.append(movie.format())
-
-	# Combo of .loads and .dumps strips out the '\' that was occuring for every value
-	movies = json.loads(json.dumps(movies))
-
-	return jsonify({
-		'success': True,
-		'movies': movies,
-		'total_movies': len(selection)
-	})
-
-"""
-Post movies
-"""
-
-@app.route('/movies', methods=['POST'])
-def create_movie():
-	body = request.get_json()
-	
-	new_movie_name = body.get('movie_name')
-	new_genre = body.get('genre')
-	new_release_date = body.get('release_date')
-	new_director = body.get('director')
-
-	movie = Movie(
-		movie_name=new_movie_name,
-		genre=new_genre,
-		release_date=new_release_date,
-		director=new_director
-	)
-
-	try:
-		movie.insert()
-
+@app.route('/movies', methods=['GET', 'POST'])
+def movies_get_or_post():
+	if request.method == 'GET':
+		selection = Movie.query.all()
+		
+		movies = []
+		
+		for movie in selection:
+			movies.append(movie.format())
+		
+		# Combo of .loads and .dumps strips out the '\' that was occuring for every value
+		movies = json.loads(json.dumps(movies))
+		
 		return jsonify({
-			'success': True
- 		}), 200
+			'success': True,
+			'movies': movies,
+			'total_movies': len(selection)
+		})
 	
-	except:
-		movie.undo()
-		abort(500)
+	else:
+		body = request.get_json()
+	
+		new_movie_name = body.get('movie_name')
+		new_genre = body.get('genre')
+		new_release_date = body.get('release_date')
+		new_director = body.get('director')
+
+		movie = Movie(
+			movie_name=new_movie_name,
+			genre=new_genre,
+			release_date=new_release_date,
+			director=new_director
+		)
+
+		try:
+			movie.insert()
+
+			return jsonify({
+				'success': True
+			}), 200
+		
+		except:
+			movie.undo()
+			abort(500)
+
+
+"""
+Delete and Update Movies
+"""
+
+@app.route('/movies/<int:movie_id>', methods=['DELETE', 'PATCH'])
+def movies_delete_or_patch(movie_id):
+	if request.method == 'DELETE':
+		try:
+			movie = Movie.query.get(movie_id)
+
+			if movie is None:
+				abort(422)
+			
+			else:
+				movie.delete()
+
+				return jsonify({
+					'success': True,
+					'deleted_movie_id': movie_id
+				}), 200
+			
+		except:
+			abort(500)
+	
+	else:
+		pass
+		
+
 
 """
 Get actors
