@@ -124,54 +124,131 @@ def movies_delete_or_patch(movie_id):
 		except:
 			abort(422)
 
+
+
+"""
+Get and create actors
+"""
+
+@app.route('/actors', methods=['GET', 'POST'])
+def actors_get_or_post():
+	if request.method == 'GET':
+		selection = Actor.query.all()
+
+		actors = []
+
+		for actor in selection:
+			actors.append(actor.format())
+
+		# Combo of .loads and .dumps strips out the '\' that was occuring for every value
+		actors = json.loads(json.dumps(actors))
+
+		return jsonify({
+			'success': True,
+			'actors': actors,
+			'total_actors': len(selection)
+		})
+	
+	else:
+		body = request.get_json()
+
+		new_actor_name = body.get('actor_name')
+		new_phone = body.get('phone')
+		new_age = body.get('age')
+		new_gender = body.get('gender')
+		new_image_link = body.get('image_link')
+
+		actor = Actor(
+			actor_name=new_actor_name,
+			phone=new_phone,
+			age=new_age,
+			gender=new_gender,
+			image_link=new_image_link
+		)
+
+		try:
+			actor.insert()
+
+			return jsonify({
+				'success': True
+			}), 200
 		
-
-
+		except:
+			actor.undo()
+			abort(500)
 
 
 """
-Get actors
+Delete actor
 """
 
-@app.route('/actors', methods=['GET'])
-def get_actors():
-	selection = Actor.query.all()
+@app.route('/actors/<int:actor_id>', methods=['DELETE'])
+def actors_delete(actor_id):
+	actor = Actor.query.get(actor_id)
 
-	actors = []
+	if actor is None:
+		print("actor is None")
+		abort(422)
+	
+	else:
+		try:
+			actor.delete()
 
-	for actor in selection:
-		actors.append(actor.format())
+			return jsonify({
+				'success': True,
+				'deleted_actor_id': actor_id
+			}), 200
+			
+		except:
+			abort(500)
 
-	# Combo of .loads and .dumps strips out the '\' that was occuring for every value
-	actors = json.loads(json.dumps(actors))
-
-	return jsonify({
-		'success': True,
-		'actors': actors,
-		'total_actors': len(selection)
-	})
 
 """
-Get roles
+Get and create roles
 """
 
-@app.route('/roles', methods=['GET'])
-def get_roles():
-	selection = Role.query.all()
+@app.route('/roles', methods=['GET', 'POST'])
+def roles_get_or_post():
+	if request.method == 'GET':
+		selection = Role.query.all()
 
-	roles = []
+		roles = []
 
-	for role in selection:
-		roles.append(role.format())
+		for role in selection:
+			roles.append(role.format())
 
-	# Combo of .loads and .dumps strips out the '\' that was occuring for every value
-	roles = json.loads(json.dumps(roles))
+		# Combo of .loads and .dumps strips out the '\' that was occuring for every value
+		roles = json.loads(json.dumps(roles))
 
-	return jsonify({
-		'success': True,
-		'roles': roles,
-		'total_roles': len(selection)
-	})
+		return jsonify({
+			'success': True,
+			'roles': roles,
+			'total_roles': len(selection)
+		}), 200
+	
+	else:
+		body = request.get_json()
+
+		new_role_number = body.get('role_number')
+		new_role_type_id = body.get('role_type_id')
+		new_movie_id = body.get('movie_id')
+
+		role = Role(
+			role_number=new_role_number,
+			role_type_id=new_role_type_id,
+			movie_id=new_movie_id
+		)
+
+		try:
+			role.insert()
+
+			return jsonify({
+				'success': True
+			}), 200
+		
+		except:
+			role.undo()
+			abort(500)
 
 """
 TODO

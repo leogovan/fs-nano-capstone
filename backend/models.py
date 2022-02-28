@@ -106,7 +106,7 @@ class Actor(db.Model, Operations):
     image_link = Column(String(500), nullable=False)
     commitments = db.relationship('Commitment', backref='actors', lazy=True, cascade='all, delete-orphan')
 
-    def __init__(self, actor_name, phone, age, gender, image_link, commitments):
+    def __init__(self, actor_name, phone, age, gender, image_link):
         Operations.__init__(self)
         self.actor_name = actor_name
         self.phone = phone
@@ -174,7 +174,7 @@ class Role(db.Model, Operations):
         }
 
 
-class RoleType(db.Model):
+class RoleType(db.Model, Operations):
     __tablename__ = 'role_types'
 
     role_types_id = Column(Integer, primary_key=True)
@@ -182,7 +182,7 @@ class RoleType(db.Model):
     commitments = db.relationship('Commitment', backref='role_types', lazy=True, cascade='all, delete-orphan')
     roles = db.relationship('Role', backref='role_types', lazy=True, cascade='all, delete-orphan')
 
-    def __init__(self, role_type, commitments, roles):
+    def __init__(self, role_type):
         self.role_type = role_type
 
     def format(self):
