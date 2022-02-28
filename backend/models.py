@@ -56,9 +56,11 @@ class Operations:
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+        print('Deleted!')
     
     def undo(self):
         db.session.rollback()
+        print('Undone!')
 
 #----------------------------------------------------------------------------#
 # Models

@@ -81,27 +81,52 @@ Delete and Update Movies
 
 @app.route('/movies/<int:movie_id>', methods=['DELETE', 'PATCH'])
 def movies_delete_or_patch(movie_id):
+	
+	movie = Movie.query.get(movie_id)
+
+	if movie is None:
+		print("movie is None")
+		abort(422)
+	
 	if request.method == 'DELETE':
 		try:
-			movie = Movie.query.get(movie_id)
+			movie.delete()
 
-			if movie is None:
-				abort(422)
-			
-			else:
-				movie.delete()
-
-				return jsonify({
-					'success': True,
-					'deleted_movie_id': movie_id
-				}), 200
+			return jsonify({
+				'success': True,
+				'deleted_movie_id': movie_id
+			}), 200
 			
 		except:
 			abort(500)
 	
 	else:
-		pass
+		try:
+			body = request.get_json()
+			
+			if body is None:
+				print("body is None")
+				abort(422)
+			
+			else:
+				print("Something is working!")
+				release_date_update = body.get('release_date')
+
+				movie.release_date = release_date_update
+
+				movie.update()
+				
+				return jsonify({
+                	"success": True,
+					'patched_movie_id': movie_id
+            	}), 200
 		
+		except:
+			abort(422)
+
+		
+
+
 
 
 """
