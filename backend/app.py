@@ -250,9 +250,16 @@ def roles_get_or_post():
 			role.undo()
 			abort(500)
 
+
 """
 TODO
-Get commitments
+Delete roles
+"""
+
+
+"""
+TODO
+Get and create commitments
 """
 
 @app.route('/commitments', methods=['GET'])
@@ -273,9 +280,15 @@ def get_commitments():
 		'total_roles': len(selection)
 	})
 
+
 """
 TODO
-Get commitments
+Delete commitments
+"""
+
+
+"""
+Get role-types
 """
 
 @app.route('/role-types', methods=['GET'])
