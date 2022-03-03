@@ -275,7 +275,6 @@ def roles_delete(role_id):
 			abort(500)
 
 """
-TODO
 Get and create commitments
 """
 
@@ -332,7 +331,25 @@ def commitments_get_or_post():
 TODO
 Delete commitments
 """
+@app.route('/commitments/<int:commitment_id>', methods=['DELETE'])
+def commitments_delete(commitment_id):
+	commitment = Commitment.query.get(commitment_id)
 
+	if commitment is None:
+		print("commitment is None")
+		abort(422)
+	
+	else:
+		try:
+			commitment.delete()
+
+			return jsonify({
+				'success': True,
+				'deleted_commitment_id': commitment_id
+			}), 200
+			
+		except:
+			abort(500)
 
 """
 Get role-types
