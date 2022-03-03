@@ -252,10 +252,27 @@ def roles_get_or_post():
 
 
 """
-TODO
 Delete roles
 """
+@app.route('/roles/<int:role_id>', methods=['DELETE'])
+def roles_delete(role_id):
+	role = Role.query.get(role_id)
 
+	if role is None:
+		print("role is None")
+		abort(422)
+	
+	else:
+		try:
+			role.delete()
+
+			return jsonify({
+				'success': True,
+				'deleted_role_id': role_id
+			}), 200
+			
+		except:
+			abort(500)
 
 """
 TODO
