@@ -279,23 +279,53 @@ TODO
 Get and create commitments
 """
 
-@app.route('/commitments', methods=['GET'])
-def get_commitments():
-	selection = Commitment.query.all()
+@app.route('/commitments', methods=['GET', 'POST'])
+def commitments_get_or_post():
+	if request.method == 'GET':
+		selection = Commitment.query.all()
 
-	commitments = []
+		commitments = []
 
-	for commitment in selection:
-		commitments.append(commitment.format())
+		for commitment in selection:
+			commitments.append(commitment.format())
 
-	# Combo of .loads and .dumps strips out the '\' that was occuring for every value
-	commitments = json.loads(json.dumps(commitments))
+		# Combo of .loads and .dumps strips out the '\' that was occuring for every value
+		commitments = json.loads(json.dumps(commitments))
 
-	return jsonify({
-		'success': True,
-		'roles': commitments,
-		'total_roles': len(selection)
-	})
+		return jsonify({
+			'success': True,
+			'roles': commitments,
+			'total_roles': len(selection)
+		})
+	else:
+		body = request.get_json()
+
+		new_start_date = body.get('start_date')
+		new_end_date = body.get('end_date')
+		new_movie_id = body.get('movie_id')
+		new_actor_id = body.get('actor_id')
+		new_role_type_id = body.get('role_type_id')
+		
+
+		commitment = Commitment(
+			start_date=new_start_date,
+			end_date=new_end_date,
+			movie_id=new_movie_id,
+			actor_id=new_actor_id,
+			role_type_id=new_role_type_id
+			
+		)
+
+		try:
+			commitment.insert()
+
+			return jsonify({
+				'success': True
+			}), 200
+		
+		except:
+			commitment.undo()
+			abort(500)
 
 
 """
