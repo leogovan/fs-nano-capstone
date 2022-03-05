@@ -85,15 +85,49 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     ##### Create Movies Tests #####
     def test_create_movies(self):
-        num_questions_before = len(Movie.query.all())
-        res = self.client().post('movies')
+        num_movies_before = len(Movie.query.all())
+        res = self.client().post('/movies', json=self.test_movie)
+        data = json.loads(res.data)
+        num_movies_after = len(Movie.query.all())
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertGreater(num_movies_after, num_movies_before, 
+            "First value is not greater than second value.")
+    
+    def test_500_create_question(self):
+        res = self.client().post('/movies', json=None)
         data = json.loads(res.data)
 
-
+        self.assertEqual(res.status_code, 500)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "Internal server error.")
     
-    ##### Delete Movies Tests #####
+    ##### Delete Movie Tests #####
+    def test_delete_movie(self):
+        res = self.client().delete('/movies/1')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['deleted_movie_id'], 1)
+    
+    def test_422_if_movie_does_not_exist(self):
+        res = self.client().delete('/movies/10000')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "Request is unprocessable.")
 
     ##### Update Movies Tests #####
+    def test_update_movie(self):
+        res = self.client().patch('/movies/1', json={"release_date": "2099-12-31"})
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['patched_movie_id'], 1)
     
     ##### Retrieve Actors Tests #####
     def test_retrieve_actors(self):
@@ -111,12 +145,28 @@ class CastingAgencyTestCase(unittest.TestCase):
 
 
     ##### Retrieve Commitments Tests #####
+    def test_retrieve_commitments(self):
+        res = self.client().get('/commitments')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['commitments'])
+        self.assertTrue(data['total_sommitments'])
 
     ##### Create Commitments Tests #####
     
     ##### Delete Commitments Tests #####
 
     ##### Retrieve Roles Tests #####
+    def test_retrieve_roles(self):
+        res = self.client().get('/roles')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['roles'])
+        self.assertTrue(data['total_roles'])
 
     ##### Create Roles Tests #####
     

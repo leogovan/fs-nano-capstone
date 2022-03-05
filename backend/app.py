@@ -110,7 +110,7 @@ def create_app(test_config=None):
 				}), 200
 				
 			except:
-				abort(500)
+				abort(422)
 		
 		else:
 			try:
@@ -304,9 +304,9 @@ def create_app(test_config=None):
 
 			return jsonify({
 				'success': True,
-				'roles': commitments,
-				'total_roles': len(selection)
-			})
+				'commitments': commitments,
+				'total_sommitments': len(selection)
+			}), 200
 		else:
 			body = request.get_json()
 
