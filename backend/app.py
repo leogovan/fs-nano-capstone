@@ -339,7 +339,6 @@ def create_app(test_config=None):
 
 
 	"""
-	TODO
 	Delete commitments
 	"""
 	@app.route('/commitments/<int:commitment_id>', methods=['DELETE'])
@@ -383,5 +382,58 @@ def create_app(test_config=None):
 			'role_types': role_types,
 			'total_role_types': len(selection)
 		})
+	
+	#----------------------------------------------------------------------------#
+	# Error Handlers
+	#----------------------------------------------------------------------------#
+
+	@app.errorhandler(400)
+	def bad_request(error):
+		return jsonify({
+			"success": False, 
+			"error": 400,
+			"message": "Bad client request."
+		}), 400
+	
+	@app.errorhandler(403)
+	def forbidden(error):
+		return jsonify({
+        	"success": False, 
+        	"error": 403,
+        	"message": "Access forbidden."
+		}), 403
+	
+	@app.errorhandler(404)
+	def not_found(error):
+		return jsonify({
+			"success": False, 
+			"error": 404,
+			"message": "Not found: server cannot find the requested resource."
+		}), 404
+
+	@app.errorhandler(405)
+	def not_allowed(error):
+		return jsonify({
+			"success": False, 
+			"error": 405,
+			"message": "Request method not allowed."
+		}), 405
+	
+
+	@app.errorhandler(422)
+	def unprocessable(error):
+		return jsonify({
+			"success": False, 
+			"error": 422,
+			"message": "Request is unprocessable."
+		}), 422
+
+	@app.errorhandler(500)
+	def server_error(error):
+		return jsonify({
+			"success": False, 
+			"error": 500,
+			"message": "Internal server error."
+		}), 500
 	
 	return app

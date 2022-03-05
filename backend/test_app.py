@@ -9,7 +9,7 @@ import sys
 from flask_sqlalchemy import SQLAlchemy
 
 from app import create_app
-from models import setup_db, Question, Category
+from models import setup_db, Actor, Movie, Commitment, Role, RoleType
 
 #----------------------------------------------------------------------------#
 # Unit Test Cases
@@ -84,6 +84,12 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertTrue(data['total_movies'])
 
     ##### Create Movies Tests #####
+    def test_create_movies(self):
+        num_questions_before = len(Movie.query.all())
+        res = self.client().post('movies')
+        data = json.loads(res.data)
+
+
     
     ##### Delete Movies Tests #####
 
