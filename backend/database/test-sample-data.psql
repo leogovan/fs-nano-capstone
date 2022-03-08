@@ -293,6 +293,7 @@ COPY public.roles (role_id, role_number, role_type_id, movie_id) FROM stdin;
 2	2	2	1
 3	100	5	1
 4	1	1	2
+5	50	4	3
 \.
 
 
@@ -328,7 +329,7 @@ SELECT pg_catalog.setval('public.role_types_role_types_id_seq', 5, true);
 -- Name: roles_role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: leogovan
 --
 
-SELECT pg_catalog.setval('public.roles_role_id_seq', 4, true);
+SELECT pg_catalog.setval('public.roles_role_id_seq', 5, true);
 
 
 --

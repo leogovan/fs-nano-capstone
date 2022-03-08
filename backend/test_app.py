@@ -225,7 +225,6 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "Request is unprocessable.")
 
-    """
 
     ##### Retrieve Roles Tests #####
     def test_retrieve_roles(self):
@@ -236,6 +235,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['roles'])
         self.assertTrue(data['total_roles'])
+
 
     ##### Create Roles Tests #####
     def test_create_roles(self):
@@ -248,7 +248,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertGreater(num_roles_after, num_roles_before, 
             "First value is not greater than second value.")
-    
+        
     def test_500_create_role(self):
         res = self.client().post('/roles', json=None)
         data = json.loads(res.data)
@@ -259,12 +259,12 @@ class CastingAgencyTestCase(unittest.TestCase):
     
     ##### Delete Roles Tests #####
     def test_delete_role(self):
-        res = self.client().delete('/roles/1')
+        res = self.client().delete('/roles/4')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted_role_id'], 1)
+        self.assertEqual(data['deleted_role_id'], 4)
     
     def test_422_if_role_does_not_exist(self):
         res = self.client().delete('/roles/10000')
@@ -274,7 +274,6 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "Request is unprocessable.")
 
-    """
 #----------------------------------------------------------------------------#
 # Make Tests Executable
 #----------------------------------------------------------------------------#
