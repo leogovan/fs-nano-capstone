@@ -51,3 +51,13 @@ flask run
 ```
 
 This will launch the app and set up the tables. At this point you can choose to run the sample data setup described in the database section above.
+
+## Testing
+From /backend (with Postgres running)
+
+```bash
+dropdb fs-capstone_test
+createdb fs-capstone_test
+psql fs-capstone_test < database/test-sample-data.psql
+python test_app.py
+```

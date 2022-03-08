@@ -1,0 +1,417 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.2
+-- Dumped by pg_dump version 13.2
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: actors; Type: TABLE; Schema: public; Owner: leogovan
+--
+
+CREATE TABLE public.actors (
+    actor_id integer NOT NULL,
+    actor_name character varying(40) NOT NULL,
+    phone character varying(40) NOT NULL,
+    age character varying(3) NOT NULL,
+    gender character(1) NOT NULL,
+    image_link character varying(500) NOT NULL
+);
+
+
+ALTER TABLE public.actors OWNER TO leogovan;
+
+--
+-- Name: actors_actor_id_seq; Type: SEQUENCE; Schema: public; Owner: leogovan
+--
+
+CREATE SEQUENCE public.actors_actor_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.actors_actor_id_seq OWNER TO leogovan;
+
+--
+-- Name: actors_actor_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: leogovan
+--
+
+ALTER SEQUENCE public.actors_actor_id_seq OWNED BY public.actors.actor_id;
+
+
+--
+-- Name: commitments; Type: TABLE; Schema: public; Owner: leogovan
+--
+
+CREATE TABLE public.commitments (
+    commitment_id integer NOT NULL,
+    start_date date NOT NULL,
+    end_date date NOT NULL,
+    role_type_id integer,
+    movie_id integer,
+    actor_id integer
+);
+
+
+ALTER TABLE public.commitments OWNER TO leogovan;
+
+--
+-- Name: commitments_commitment_id_seq; Type: SEQUENCE; Schema: public; Owner: leogovan
+--
+
+CREATE SEQUENCE public.commitments_commitment_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.commitments_commitment_id_seq OWNER TO leogovan;
+
+--
+-- Name: commitments_commitment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: leogovan
+--
+
+ALTER SEQUENCE public.commitments_commitment_id_seq OWNED BY public.commitments.commitment_id;
+
+
+--
+-- Name: movies; Type: TABLE; Schema: public; Owner: leogovan
+--
+
+CREATE TABLE public.movies (
+    movie_id integer NOT NULL,
+    movie_name character varying(40) NOT NULL,
+    genre character varying(40) NOT NULL,
+    release_date date NOT NULL,
+    director character varying(40) NOT NULL
+);
+
+
+ALTER TABLE public.movies OWNER TO leogovan;
+
+--
+-- Name: movies_movie_id_seq; Type: SEQUENCE; Schema: public; Owner: leogovan
+--
+
+CREATE SEQUENCE public.movies_movie_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.movies_movie_id_seq OWNER TO leogovan;
+
+--
+-- Name: movies_movie_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: leogovan
+--
+
+ALTER SEQUENCE public.movies_movie_id_seq OWNED BY public.movies.movie_id;
+
+
+--
+-- Name: role_types; Type: TABLE; Schema: public; Owner: leogovan
+--
+
+CREATE TABLE public.role_types (
+    role_types_id integer NOT NULL,
+    role_type character varying(20) NOT NULL
+);
+
+
+ALTER TABLE public.role_types OWNER TO leogovan;
+
+--
+-- Name: role_types_role_types_id_seq; Type: SEQUENCE; Schema: public; Owner: leogovan
+--
+
+CREATE SEQUENCE public.role_types_role_types_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.role_types_role_types_id_seq OWNER TO leogovan;
+
+--
+-- Name: role_types_role_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: leogovan
+--
+
+ALTER SEQUENCE public.role_types_role_types_id_seq OWNED BY public.role_types.role_types_id;
+
+
+--
+-- Name: roles; Type: TABLE; Schema: public; Owner: leogovan
+--
+
+CREATE TABLE public.roles (
+    role_id integer NOT NULL,
+    role_number integer NOT NULL,
+    role_type_id integer,
+    movie_id integer
+);
+
+
+ALTER TABLE public.roles OWNER TO leogovan;
+
+--
+-- Name: roles_role_id_seq; Type: SEQUENCE; Schema: public; Owner: leogovan
+--
+
+CREATE SEQUENCE public.roles_role_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.roles_role_id_seq OWNER TO leogovan;
+
+--
+-- Name: roles_role_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: leogovan
+--
+
+ALTER SEQUENCE public.roles_role_id_seq OWNED BY public.roles.role_id;
+
+
+--
+-- Name: actors actor_id; Type: DEFAULT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.actors ALTER COLUMN actor_id SET DEFAULT nextval('public.actors_actor_id_seq'::regclass);
+
+
+--
+-- Name: commitments commitment_id; Type: DEFAULT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.commitments ALTER COLUMN commitment_id SET DEFAULT nextval('public.commitments_commitment_id_seq'::regclass);
+
+
+--
+-- Name: movies movie_id; Type: DEFAULT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.movies ALTER COLUMN movie_id SET DEFAULT nextval('public.movies_movie_id_seq'::regclass);
+
+
+--
+-- Name: role_types role_types_id; Type: DEFAULT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.role_types ALTER COLUMN role_types_id SET DEFAULT nextval('public.role_types_role_types_id_seq'::regclass);
+
+
+--
+-- Name: roles role_id; Type: DEFAULT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.roles ALTER COLUMN role_id SET DEFAULT nextval('public.roles_role_id_seq'::regclass);
+
+
+--
+-- Data for Name: actors; Type: TABLE DATA; Schema: public; Owner: leogovan
+--
+
+COPY public.actors (actor_id, actor_name, phone, age, gender, image_link) FROM stdin;
+1	Hugh Grant	555-5555	61	M	https://img.huffingtonpost.com/asset/611cf9c3280000a4da71df83.jpeg?cache=GJR9fMC4LZ&ops=crop_700_144_1154_1461%2Cscalefit_720_noupscale
+2	Jason Statham	555-5555	54	M	https://variety.com/wp-content/uploads/2020/12/Jason-Statham.jpg
+3	Martine Mccutcheon	555-5555	45	F	https://www.hellomagazine.com/imagenes/fashion/celebrity-style/20211013123828/martine-mccutcheon-black-dress-the-savoy/0-598-160/martine-mccutcheon-black-dress-t.jpg
+\.
+
+
+--
+-- Data for Name: commitments; Type: TABLE DATA; Schema: public; Owner: leogovan
+--
+
+COPY public.commitments (commitment_id, start_date, end_date, role_type_id, movie_id, actor_id) FROM stdin;
+1	2022-01-01	2022-06-01	1	1	1
+2	2023-01-01	2023-06-01	1	3	2
+3	2024-01-01	2024-06-01	1	2	3
+\.
+
+
+--
+-- Data for Name: movies; Type: TABLE DATA; Schema: public; Owner: leogovan
+--
+
+COPY public.movies (movie_id, movie_name, genre, release_date, director) FROM stdin;
+1	Transporter 8	Action	2024-12-31	Louis Leterrier
+2	Love Actually - The Revenge	Horror	2025-06-15	Richard Curtis
+3	Predator	Romance	2026-06-15	Steven Spielberg
+\.
+
+
+--
+-- Data for Name: role_types; Type: TABLE DATA; Schema: public; Owner: leogovan
+--
+
+COPY public.role_types (role_types_id, role_type) FROM stdin;
+1	star
+2	co-star
+3	supporting
+4	featured_extra
+5	background
+\.
+
+
+--
+-- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: leogovan
+--
+
+COPY public.roles (role_id, role_number, role_type_id, movie_id) FROM stdin;
+1	1	1	1
+2	2	2	1
+3	100	5	1
+4	1	1	2
+\.
+
+
+--
+-- Name: actors_actor_id_seq; Type: SEQUENCE SET; Schema: public; Owner: leogovan
+--
+
+SELECT pg_catalog.setval('public.actors_actor_id_seq', 3, true);
+
+
+--
+-- Name: commitments_commitment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: leogovan
+--
+
+SELECT pg_catalog.setval('public.commitments_commitment_id_seq', 3, true);
+
+
+--
+-- Name: movies_movie_id_seq; Type: SEQUENCE SET; Schema: public; Owner: leogovan
+--
+
+SELECT pg_catalog.setval('public.movies_movie_id_seq', 3, true);
+
+
+--
+-- Name: role_types_role_types_id_seq; Type: SEQUENCE SET; Schema: public; Owner: leogovan
+--
+
+SELECT pg_catalog.setval('public.role_types_role_types_id_seq', 5, true);
+
+
+--
+-- Name: roles_role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: leogovan
+--
+
+SELECT pg_catalog.setval('public.roles_role_id_seq', 4, true);
+
+
+--
+-- Name: actors actors_pkey; Type: CONSTRAINT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.actors
+    ADD CONSTRAINT actors_pkey PRIMARY KEY (actor_id);
+
+
+--
+-- Name: commitments commitments_pkey; Type: CONSTRAINT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.commitments
+    ADD CONSTRAINT commitments_pkey PRIMARY KEY (commitment_id);
+
+
+--
+-- Name: movies movies_pkey; Type: CONSTRAINT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.movies
+    ADD CONSTRAINT movies_pkey PRIMARY KEY (movie_id);
+
+
+--
+-- Name: role_types role_types_pkey; Type: CONSTRAINT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.role_types
+    ADD CONSTRAINT role_types_pkey PRIMARY KEY (role_types_id);
+
+
+--
+-- Name: roles roles_pkey; Type: CONSTRAINT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.roles
+    ADD CONSTRAINT roles_pkey PRIMARY KEY (role_id);
+
+
+--
+-- Name: commitments commitments_actor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.commitments
+    ADD CONSTRAINT commitments_actor_id_fkey FOREIGN KEY (actor_id) REFERENCES public.actors(actor_id) ON DELETE CASCADE;
+
+
+--
+-- Name: commitments commitments_movie_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.commitments
+    ADD CONSTRAINT commitments_movie_id_fkey FOREIGN KEY (movie_id) REFERENCES public.movies(movie_id) ON DELETE CASCADE;
+
+
+--
+-- Name: commitments commitments_role_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.commitments
+    ADD CONSTRAINT commitments_role_type_id_fkey FOREIGN KEY (role_type_id) REFERENCES public.role_types(role_types_id) ON DELETE CASCADE;
+
+
+--
+-- Name: roles roles_movie_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.roles
+    ADD CONSTRAINT roles_movie_id_fkey FOREIGN KEY (movie_id) REFERENCES public.movies(movie_id) ON DELETE CASCADE;
+
+
+--
+-- Name: roles roles_role_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: leogovan
+--
+
+ALTER TABLE ONLY public.roles
+    ADD CONSTRAINT roles_role_type_id_fkey FOREIGN KEY (role_type_id) REFERENCES public.role_types(role_types_id) ON DELETE CASCADE;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

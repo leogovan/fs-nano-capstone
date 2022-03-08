@@ -121,7 +121,6 @@ def create_app(test_config=None):
 					abort(422)
 				
 				else:
-					print("Something is working!")
 					release_date_update = body.get('release_date')
 
 					movie.release_date = release_date_update

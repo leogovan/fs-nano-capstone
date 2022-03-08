@@ -21,7 +21,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     def setUp(self):
         self.app = create_app()
         self.client = self.app.test_client
-        self.database_name = "casting_agency_test"
+        self.database_name = "fs-capstone_test"
         self.database_path = "postgresql://{}/{}".format('localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
@@ -45,9 +45,9 @@ class CastingAgencyTestCase(unittest.TestCase):
 
         self.test_actor = {
             "actor_name": "Test Name",
-            "phone": "Test Phone",
-            "age": "Test Age",
-            "gender": "Test Gender",
+            "phone": "555-55555",
+            "age": "37",
+            "gender": "F",
             "image_link": "www.test-domain.com/media/some-image-url.jpg"
         }
 
@@ -83,7 +83,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertTrue(data['movies'])
         self.assertTrue(data['total_movies'])
 
-    ##### Create Movies Tests #####
+    # ##### Create Movies Tests #####
     def test_create_movies(self):
         num_movies_before = len(Movie.query.all())
         res = self.client().post('/movies', json=self.test_movie)
@@ -105,12 +105,12 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     ##### Update Movies Tests #####
     def test_update_movie(self):
-        res = self.client().patch('/movies/1', json={"release_date": "2099-12-31"})
+        res = self.client().patch('/movies/2', json={"release_date": "2099-12-31"})
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['patched_movie_id'], 1)
+        self.assertEqual(data['patched_movie_id'], 2)
     
     ##### Delete Movie Tests #####
     def test_delete_movie(self):
@@ -128,7 +128,8 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "Request is unprocessable.")
-    
+
+
     ##### Retrieve Actors Tests #####
     def test_retrieve_actors(self):
         res = self.client().get('/actors')
@@ -141,15 +142,15 @@ class CastingAgencyTestCase(unittest.TestCase):
     ##### Create Actors Tests #####
     def test_create_actors(self):
         num_actors_before = len(Actor.query.all())
-        res = self.client().post('/actors', json=self.test_actors)
+        res = self.client().post('/actors', json=self.test_actor)
         data = json.loads(res.data)
         num_actors_after = len(Actor.query.all())
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertGreater(num_actors_after, num_actors_before, 
-            "First value is not greater than second value.")
-    
+                "First value is not greater than second value.")
+
     def test_500_create_actor(self):
         res = self.client().post('/actors', json=None)
         data = json.loads(res.data)
@@ -157,7 +158,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 500)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "Internal server error.")
-
+ 
     ##### Delete Actors Tests #####
     def test_delete_actor(self):
         res = self.client().delete('/actors/1')
@@ -166,7 +167,8 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertEqual(data['deleted_actor_id'], 1)
-    
+
+
     def test_422_if_actor_does_not_exist(self):
         res = self.client().delete('/actors/10000')
         data = json.loads(res.data)
@@ -174,6 +176,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "Request is unprocessable.")
+
 
     ##### Retrieve Commitments Tests #####
     def test_retrieve_commitments(self):
@@ -196,7 +199,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertGreater(num_commitments_after, num_commitments_before, 
             "First value is not greater than second value.")
-    
+      
     def test_500_create_commitment(self):
         res = self.client().post('/commitments', json=None)
         data = json.loads(res.data)
@@ -207,13 +210,13 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     ##### Delete Commitments Tests #####
     def test_delete_commitment(self):
-        res = self.client().delete('/commitments/1')
+        res = self.client().delete('/commitments/2')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted_commitment_id'], 1)
-    
+        self.assertEqual(data['deleted_commitment_id'], 2)
+      
     def test_422_if_commitment_does_not_exist(self):
         res = self.client().delete('/commitments/10000')
         data = json.loads(res.data)
@@ -221,6 +224,8 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "Request is unprocessable.")
+
+    """
 
     ##### Retrieve Roles Tests #####
     def test_retrieve_roles(self):
@@ -269,7 +274,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "Request is unprocessable.")
 
-
+    """
 #----------------------------------------------------------------------------#
 # Make Tests Executable
 #----------------------------------------------------------------------------#
