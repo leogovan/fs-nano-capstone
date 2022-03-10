@@ -85,7 +85,7 @@ def get_token_auth_header():
 '''
 check_permissions(permission, payload) method:
 
-- permission: string permission (i.e. 'post:drink')
+- permission: string permission (i.e. 'post:movies')
 - payload: decoded jwt payload
 - raises an AuthError if permissions are not included in the payload
         !!NOTE check your RBAC settings in Auth0
@@ -195,7 +195,7 @@ def verify_decode_jwt(token):
 '''
 @requires_auth(permission) decorator method:
 
-- permission: string permission (i.e. 'post:drink')
+- permission: string permission (i.e. 'post:movie')
 
     it should use the get_token_auth_header method to get the token
     it should use the verify_decode_jwt method to decode the jwt
