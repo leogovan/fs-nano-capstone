@@ -43,6 +43,7 @@ def create_app(test_config=None):
 	"""
 
 	@app.route('/movies', methods=['GET'])
+	@requires_auth('get:movies')
 	def get_movies():
 		try:
 			selection = Movie.query.all()
@@ -69,6 +70,7 @@ def create_app(test_config=None):
 	"""
 	
 	@app.route('/movies', methods=['POST'])
+	@requires_auth('post:movies')
 	def post_movie():
 		body = request.get_json()
 		
@@ -101,6 +103,7 @@ def create_app(test_config=None):
 	"""
 
 	@app.route('/movies/<int:movie_id>', methods=['DELETE'])
+	@requires_auth('delete:movies')
 	def delete_movie(movie_id):
 		
 		movie = Movie.query.get(movie_id)
@@ -126,6 +129,7 @@ def create_app(test_config=None):
 	"""
 
 	@app.route('/movies/<int:movie_id>', methods=['PATCH'])
+	@requires_auth('patch:movies')
 	def patch_movie(movie_id):
 		
 		movie = Movie.query.get(movie_id)
@@ -162,6 +166,7 @@ def create_app(test_config=None):
 	"""
 
 	@app.route('/actors', methods=['GET'])
+	@requires_auth('get:actors')
 	def get_actors():
 		selection = Actor.query.all()
 
@@ -185,6 +190,7 @@ def create_app(test_config=None):
 	"""
 
 	@app.route('/actors', methods=['POST'])
+	@requires_auth('post:actors')
 	def post_actor():
 		body = request.get_json()
 
@@ -219,6 +225,7 @@ def create_app(test_config=None):
 	"""
 
 	@app.route('/actors/<int:actor_id>', methods=['DELETE'])
+	@requires_auth('delete:actors')
 	def actors_delete(actor_id):
 		actor = Actor.query.get(actor_id)
 
@@ -244,6 +251,7 @@ def create_app(test_config=None):
 	"""
 
 	@app.route('/roles', methods=['GET'])
+	@requires_auth('get:roles')
 	def get_roles():
 		selection = Role.query.all()
 
@@ -266,6 +274,7 @@ def create_app(test_config=None):
 	"""
 
 	@app.route('/roles', methods=['POST'])
+	@requires_auth('post:roles')
 	def post_role():
 		body = request.get_json()
 
@@ -295,6 +304,7 @@ def create_app(test_config=None):
 	Delete role
 	"""
 	@app.route('/roles/<int:role_id>', methods=['DELETE'])
+	@requires_auth('delete:roles')
 	def roles_delete(role_id):
 		role = Role.query.get(role_id)
 
@@ -319,6 +329,7 @@ def create_app(test_config=None):
 	"""
 
 	@app.route('/commitments', methods=['GET'])
+	@requires_auth('get:commitments')
 	def get_commitments():
 		selection = Commitment.query.all()
 
@@ -340,7 +351,8 @@ def create_app(test_config=None):
 	Create commitment
 	"""
 
-	@app.route('/commitments', methods=['GET', 'POST'])
+	@app.route('/commitments', methods=['POST'])
+	@requires_auth('post:commitments')
 	def post_commitment():
 		body = request.get_json()
 
@@ -374,6 +386,7 @@ def create_app(test_config=None):
 	Delete commitment
 	"""
 	@app.route('/commitments/<int:commitment_id>', methods=['DELETE'])
+	@requires_auth('delete:commitments')
 	def commitments_delete(commitment_id):
 		commitment = Commitment.query.get(commitment_id)
 
@@ -398,6 +411,7 @@ def create_app(test_config=None):
 	"""
 
 	@app.route('/role-types', methods=['GET'])
+	@requires_auth('get:role-types')
 	def get_role_types():
 		selection = RoleType.query.all()
 
