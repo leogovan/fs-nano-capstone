@@ -7,6 +7,8 @@ import unittest
 import json
 import sys
 from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
+load_dotenv()
 
 from app import create_app
 from models import setup_db, Actor, Movie, Commitment, Role, RoleType
@@ -35,6 +37,9 @@ class CastingAgencyTestCase(unittest.TestCase):
         #----------------------------------------------------------------------------#
         # Test Data
         #----------------------------------------------------------------------------#
+
+        self.casting_director_token = os.getenv('CASTING_DIRECTOR_TOKEN')
+        self.casting_assistant_token = os.getenv('CASTING_ASSISTANT_TOKEN')
 
         self.test_movie = {
             "movie_name": "Test Movie",
@@ -74,8 +79,23 @@ class CastingAgencyTestCase(unittest.TestCase):
     #----------------------------------------------------------------------------#
 
     ##### Retrieve Movies Tests #####
-    def test_retrieve_movies(self):
-        res = self.client().get('/movies')
+    def test_retrieve_movies_as_director(self):
+        res = self.client().get('/movies', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['movies'])
+        self.assertTrue(data['total_movies'])
+    
+    def test_retrieve_movies_as_assistant(self):
+        res = self.client().get('/movies', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_assistant_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -86,7 +106,10 @@ class CastingAgencyTestCase(unittest.TestCase):
     # ##### Create Movies Tests #####
     def test_create_movies(self):
         num_movies_before = len(Movie.query.all())
-        res = self.client().post('/movies', json=self.test_movie)
+        res = self.client().post('/movies', json=self.test_movie, headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
         data = json.loads(res.data)
         num_movies_after = len(Movie.query.all())
 
@@ -96,7 +119,10 @@ class CastingAgencyTestCase(unittest.TestCase):
             "First value is not greater than second value.")
     
     def test_500_create_movies(self):
-        res = self.client().post('/movies', json=None)
+        res = self.client().post('/movies', json=None, headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 500)
@@ -105,7 +131,10 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     ##### Update Movies Tests #####
     def test_update_movie(self):
-        res = self.client().patch('/movies/2', json={"release_date": "2099-12-31"})
+        res = self.client().patch('/movies/2', json={"release_date": "2099-12-31"}, headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -114,7 +143,10 @@ class CastingAgencyTestCase(unittest.TestCase):
     
     ##### Delete Movie Tests #####
     def test_delete_movie(self):
-        res = self.client().delete('/movies/1')
+        res = self.client().delete('/movies/1', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -122,7 +154,10 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['deleted_movie_id'], 1)
     
     def test_422_if_movie_does_not_exist(self):
-        res = self.client().delete('/movies/10000')
+        res = self.client().delete('/movies/10000', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -131,8 +166,22 @@ class CastingAgencyTestCase(unittest.TestCase):
 
 
     ##### Retrieve Actors Tests #####
-    def test_retrieve_actors(self):
-        res = self.client().get('/actors')
+    def test_retrieve_actors_as_director(self):
+        res = self.client().get('/actors', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['actors'])
+    
+    def test_retrieve_actors_as_assistant(self):
+        res = self.client().get('/actors', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_assistant_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -142,7 +191,10 @@ class CastingAgencyTestCase(unittest.TestCase):
     ##### Create Actors Tests #####
     def test_create_actors(self):
         num_actors_before = len(Actor.query.all())
-        res = self.client().post('/actors', json=self.test_actor)
+        res = self.client().post('/actors', json=self.test_actor, headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
         data = json.loads(res.data)
         num_actors_after = len(Actor.query.all())
 
@@ -152,7 +204,10 @@ class CastingAgencyTestCase(unittest.TestCase):
                 "First value is not greater than second value.")
 
     def test_500_create_actor(self):
-        res = self.client().post('/actors', json=None)
+        res = self.client().post('/actors', json=None, headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 500)
@@ -161,7 +216,10 @@ class CastingAgencyTestCase(unittest.TestCase):
  
     ##### Delete Actors Tests #####
     def test_delete_actor(self):
-        res = self.client().delete('/actors/1')
+        res = self.client().delete('/actors/1', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -170,7 +228,10 @@ class CastingAgencyTestCase(unittest.TestCase):
 
 
     def test_422_if_actor_does_not_exist(self):
-        res = self.client().delete('/actors/10000')
+        res = self.client().delete('/actors/10000', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -179,8 +240,23 @@ class CastingAgencyTestCase(unittest.TestCase):
 
 
     ##### Retrieve Commitments Tests #####
-    def test_retrieve_commitments(self):
-        res = self.client().get('/commitments')
+    def test_retrieve_commitments_as_director(self):
+        res = self.client().get('/commitments', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['commitments'])
+        self.assertTrue(data['total_sommitments'])
+    
+    def test_retrieve_commitments_as_assistant(self):
+        res = self.client().get('/commitments', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_assistant_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -189,9 +265,26 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertTrue(data['total_sommitments'])
 
     ##### Create Commitments Tests #####
-    def test_create_commitments(self):
+    def test_create_commitments_as_director(self):
         num_commitments_before = len(Commitment.query.all())
-        res = self.client().post('/commitments', json=self.test_commitment)
+        res = self.client().post('/commitments', json=self.test_commitment, headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
+        data = json.loads(res.data)
+        num_commitments_after = len(Commitment.query.all())
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertGreater(num_commitments_after, num_commitments_before, 
+            "First value is not greater than second value.")
+    
+    def test_create_commitments_as_assistant(self):
+        num_commitments_before = len(Commitment.query.all())
+        res = self.client().post('/commitments', json=self.test_commitment, headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_assistant_token)
+            })
         data = json.loads(res.data)
         num_commitments_after = len(Commitment.query.all())
 
@@ -200,8 +293,22 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertGreater(num_commitments_after, num_commitments_before, 
             "First value is not greater than second value.")
       
-    def test_500_create_commitment(self):
-        res = self.client().post('/commitments', json=None)
+    def test_500_create_commitment_as_director(self):
+        res = self.client().post('/commitments', json=None, headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 500)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "Internal server error.")
+
+    def test_500_create_commitment_as_assistant(self):
+        res = self.client().post('/commitments', json=None, headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_assistant_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 500)
@@ -209,16 +316,44 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['message'], "Internal server error.")
 
     ##### Delete Commitments Tests #####
-    def test_delete_commitment(self):
-        res = self.client().delete('/commitments/2')
+    def test_delete_commitment_as_director(self):
+        res = self.client().delete('/commitments/2', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertEqual(data['deleted_commitment_id'], 2)
+
+    def test_delete_commitment_as_assistant(self):
+        res = self.client().delete('/commitments/2', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_assistant_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertEqual(data['deleted_commitment_id'], 2)
       
-    def test_422_if_commitment_does_not_exist(self):
-        res = self.client().delete('/commitments/10000')
+    def test_422_if_commitment_does_not_exist_as_director(self):
+        res = self.client().delete('/commitments/10000', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], "Request is unprocessable.")
+    
+    def test_422_if_commitment_does_not_exist_as_assistant(self):
+        res = self.client().delete('/commitments/10000', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_assistant_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -227,8 +362,23 @@ class CastingAgencyTestCase(unittest.TestCase):
 
 
     ##### Retrieve Roles Tests #####
-    def test_retrieve_roles(self):
-        res = self.client().get('/roles')
+    def test_retrieve_roles_as_director(self):
+        res = self.client().get('/roles', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['roles'])
+        self.assertTrue(data['total_roles'])
+    
+    def test_retrieve_roles_as_assistant(self):
+        res = self.client().get('/roles', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_assistant_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -240,7 +390,10 @@ class CastingAgencyTestCase(unittest.TestCase):
     ##### Create Roles Tests #####
     def test_create_roles(self):
         num_roles_before = len(Role.query.all())
-        res = self.client().post('/roles', json=self.test_role)
+        res = self.client().post('/roles', json=self.test_role, headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
         data = json.loads(res.data)
         num_roles_after = len(Role.query.all())
 
@@ -250,7 +403,10 @@ class CastingAgencyTestCase(unittest.TestCase):
             "First value is not greater than second value.")
         
     def test_500_create_role(self):
-        res = self.client().post('/roles', json=None)
+        res = self.client().post('/roles', json=None, headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 500)
@@ -259,7 +415,10 @@ class CastingAgencyTestCase(unittest.TestCase):
     
     ##### Delete Roles Tests #####
     def test_delete_role(self):
-        res = self.client().delete('/roles/4')
+        res = self.client().delete('/roles/4', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -267,7 +426,10 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['deleted_role_id'], 4)
     
     def test_422_if_role_does_not_exist(self):
-        res = self.client().delete('/roles/10000')
+        res = self.client().delete('/roles/10000', headers={
+                "Authorization":
+                "Bearer {}".format(self.casting_director_token)
+            })
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
