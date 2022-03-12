@@ -243,9 +243,11 @@ ALTER TABLE ONLY public.roles ALTER COLUMN role_id SET DEFAULT nextval('public.r
 --
 
 COPY public.actors (actor_id, actor_name, phone, age, gender, image_link) FROM stdin;
-1	Hugh Grant	555-5555	61	M	https://img.huffingtonpost.com/asset/611cf9c3280000a4da71df83.jpeg?cache=GJR9fMC4LZ&ops=crop_700_144_1154_1461%2Cscalefit_720_noupscale
-2	Jason Statham	555-5555	54	M	https://variety.com/wp-content/uploads/2020/12/Jason-Statham.jpg
-3	Martine Mccutcheon	555-5555	45	F	https://www.hellomagazine.com/imagenes/fashion/celebrity-style/20211013123828/martine-mccutcheon-black-dress-the-savoy/0-598-160/martine-mccutcheon-black-dress-t.jpg
+1	Hugh Grant	555-5555	61	M	https://cdn.mos.cms.futurecdn.net/27YxZH8yY9pMztx4WqpAa9.jpg
+2	Jason Statham	555-5555	54	M	https://www.onthisday.com/images/people/jason-statham-medium.jpg
+3	Martine Mccutcheon	555-5555	45	F	https://keyassets-p2.timeincuk.net/wp/prod/wp-content/uploads/sites/63/2015/10/martine-mccutcheon.png
+4	Arnold Schwarzenegger	555-5555	74	M	https://www.cheatsheet.com/wp-content/uploads/2021/05/arnold-2.jpg
+5	Jessie Wallace	555-5555	50	F	https://i2-prod.liverpoolecho.co.uk/incoming/article17632741.ece/ALTERNATES/s615/0_JS170849030.jpg
 \.
 
 
@@ -257,6 +259,8 @@ COPY public.commitments (commitment_id, start_date, end_date, role_type_id, movi
 1	2022-01-01	2022-06-01	1	1	1
 2	2023-01-01	2023-06-01	1	3	2
 3	2024-01-01	2024-06-01	1	2	3
+4	2025-01-01	2025-06-01	1	5	4
+5	2026-01-01	2026-06-01	5	4	5
 \.
 
 
@@ -268,6 +272,8 @@ COPY public.movies (movie_id, movie_name, genre, release_date, director) FROM st
 1	Transporter 8	Action	2024-12-31	Louis Leterrier
 2	Love Actually - The Revenge	Horror	2025-06-15	Richard Curtis
 3	Predator	Romance	2026-06-15	Steven Spielberg
+4	Star Wars	Western	1977-05-25	George Lucas
+5	Clifford the Big Red Dog	LGBT+	2021-11-10	Walt Becker
 \.
 
 
@@ -294,6 +300,9 @@ COPY public.roles (role_id, role_number, role_type_id, movie_id) FROM stdin;
 3	100	5	1
 4	1	1	2
 5	50	4	3
+6	75	4	4
+7	250	5	4
+8	1	1	5
 \.
 
 
@@ -301,21 +310,21 @@ COPY public.roles (role_id, role_number, role_type_id, movie_id) FROM stdin;
 -- Name: actors_actor_id_seq; Type: SEQUENCE SET; Schema: public; Owner: leogovan
 --
 
-SELECT pg_catalog.setval('public.actors_actor_id_seq', 3, true);
+SELECT pg_catalog.setval('public.actors_actor_id_seq', 5, true);
 
 
 --
 -- Name: commitments_commitment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: leogovan
 --
 
-SELECT pg_catalog.setval('public.commitments_commitment_id_seq', 3, true);
+SELECT pg_catalog.setval('public.commitments_commitment_id_seq', 5, true);
 
 
 --
 -- Name: movies_movie_id_seq; Type: SEQUENCE SET; Schema: public; Owner: leogovan
 --
 
-SELECT pg_catalog.setval('public.movies_movie_id_seq', 3, true);
+SELECT pg_catalog.setval('public.movies_movie_id_seq', 5, true);
 
 
 --
@@ -329,7 +338,7 @@ SELECT pg_catalog.setval('public.role_types_role_types_id_seq', 5, true);
 -- Name: roles_role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: leogovan
 --
 
-SELECT pg_catalog.setval('public.roles_role_id_seq', 5, true);
+SELECT pg_catalog.setval('public.roles_role_id_seq', 8, true);
 
 
 --

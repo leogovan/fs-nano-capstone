@@ -90,7 +90,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         self.assertTrue(data['movies'])
         self.assertTrue(data['total_movies'])
-""" 
+
     def test_retrieve_movies_as_assistant(self):
         res = self.client().get('/movies', headers={
                 "Authorization":
@@ -316,16 +316,16 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['message'], "Internal server error.")
 
     ##### Delete Commitments Tests #####
-    def test_delete_commitment_as_director(self):
-        res = self.client().delete('/commitments/2', headers={
-                "Authorization":
-                "Bearer {}".format(self.casting_director_token)
-            })
-        data = json.loads(res.data)
+    # def test_delete_commitment_as_director(self):
+    #     res = self.client().delete('/commitments/2', headers={
+    #             "Authorization":
+    #             "Bearer {}".format(self.casting_director_token)
+    #         })
+    #     data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(data['success'], True)
-        self.assertEqual(data['deleted_commitment_id'], 2)
+    #     self.assertEqual(res.status_code, 200)
+    #     self.assertEqual(data['success'], True)
+    #     self.assertEqual(data['deleted_commitment_id'], 2)
 
     def test_delete_commitment_as_assistant(self):
         res = self.client().delete('/commitments/2', headers={
@@ -435,8 +435,6 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "Request is unprocessable.")
-
-"""
 
 #----------------------------------------------------------------------------#
 # Make Tests Executable
