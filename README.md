@@ -1,6 +1,27 @@
 # Readme
 
+## Project Motivation
+This project is the final demonstration of the skills learned in the Udacity Full-Stack course, featuring the use of:
 
+* Application based on Python 3 and Flask
+* Entity modelling using Postgresql
+* Creating a number of APIs
+* Utilising SQLAlchemy ORM to abstract the application's interaction with the database
+* Authentication and RBAC utilising Auth0 as the identity prvoider
+* Creating unit tests for the application APIs
+* Deploy the application to Heroku
+
+### Project abstract
+A casting agency wants to manage the actors on their books and their commitments to filming movies.
+
+The casting assistant can view actors, movies, roles, role-types and commitments. They can also create/delete records for actors to attach or detach them from movies (commitments)
+
+The casting director has the all available privileges
+
+#### Future planned updates
+1. An actor can have multiple commitments to multiple films, but the commitment dates must not overlap
+2. A movie can have multiple actors starring in it and it can define the maximum number of actors per role, per movie (this is represented by the number of instances of role types associated to a movie)
+3. A front end for this
 
 ## Pre-requisites
 ### Python and Postgres
