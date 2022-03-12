@@ -73,6 +73,10 @@ def create_app(test_config=None):
 	@requires_auth('post:movies')
 	def post_movie(self):
 		body = request.get_json()
+
+		if body is None:
+			print("body is None")
+			abort(422)
 		
 		new_movie_name = body.get('movie_name')
 		new_genre = body.get('genre')
@@ -110,7 +114,7 @@ def create_app(test_config=None):
 
 		if movie is None:
 			print("movie is None")
-			abort(422)
+			abort(404)
 		
 		try:
 			movie.delete()
@@ -121,7 +125,7 @@ def create_app(test_config=None):
 			}), 200
 				
 		except:
-			abort(422)
+			abort(500)
 
 
 	"""
@@ -158,7 +162,7 @@ def create_app(test_config=None):
 				}), 200
 			
 		except:
-			abort(422)
+			abort(500)
 
 
 	"""
@@ -193,6 +197,10 @@ def create_app(test_config=None):
 	@requires_auth('post:actors')
 	def post_actor(self):
 		body = request.get_json()
+
+		if body is None:
+			print("body is None")
+			abort(422)
 
 		new_actor_name = body.get('actor_name')
 		new_phone = body.get('phone')
@@ -231,7 +239,7 @@ def create_app(test_config=None):
 
 		if actor is None:
 			print("actor is None")
-			abort(422)
+			abort(404)
 		
 		else:
 			try:
@@ -278,6 +286,10 @@ def create_app(test_config=None):
 	def post_role(self):
 		body = request.get_json()
 
+		if body is None:
+			print("body is None")
+			abort(422)
+
 		new_role_number = body.get('role_number')
 		new_role_type_id = body.get('role_type_id')
 		new_movie_id = body.get('movie_id')
@@ -310,7 +322,7 @@ def create_app(test_config=None):
 
 		if role is None:
 			print("role is None")
-			abort(422)
+			abort(404)
 		
 		else:
 			try:
@@ -356,6 +368,10 @@ def create_app(test_config=None):
 	def post_commitment(self):
 		body = request.get_json()
 
+		if body is None:
+			print("body is None")
+			abort(422)
+
 		new_start_date = body.get('start_date')
 		new_end_date = body.get('end_date')
 		new_movie_id = body.get('movie_id')
@@ -392,7 +408,7 @@ def create_app(test_config=None):
 
 		if commitment is None:
 			print("commitment is None")
-			abort(422)
+			abort(404)
 		
 		else:
 			try:
