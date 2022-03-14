@@ -15,11 +15,33 @@ load_dotenv()
 # Setup
 #----------------------------------------------------------------------------#
 
-database_name = os.getenv('DB_NAME')
-database_user = os.getenv('DB_USER')
-database_pwd = os.getenv('DB_PASS')
-database_host = os.getenv('DB_HOST')
-database_path = "postgresql://{}/{}".format(database_host, database_name)
+"""
+To run the app or the unit tests locally, you will need to:
+
+1. Uncomment the various environment variables below 
+2. Comment out the second database_path variable
+
+This is so that we don't get conflicts with trying to connect with 
+the wrong database
+
+3. Modify the .env file with valid tokens for the casting director 
+and assistant. Details about this is in the README
+
+"""
+
+## Uncomment these 5 lines for testing and running app locally
+
+# database_name = os.getenv('DB_NAME')
+# database_user = os.getenv('DB_USER')
+# database_pwd = os.getenv('DB_PASS')
+# database_host = os.getenv('DB_HOST')
+# database_path = "postgresql://{}/{}".format(database_host, database_name)
+
+
+## Comment these 3 lines for testing and running app locally
+database_path = os.environ['DATABASE_URL']
+if database_path.startswith("postgres://"):
+    database_path = database_path.replace("postgres://", "postgresql://", 1)
 
 db = SQLAlchemy()
 
