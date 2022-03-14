@@ -11,6 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 from models import setup_db, Movie, Actor, RoleType, Role, Commitment, db
 from auth import AuthError, requires_auth
+from flask_migrate import Migrate
 
 #----------------------------------------------------------------------------#
 # Setup
@@ -507,3 +508,6 @@ def create_app(test_config=None):
 		}), error.status_code
 	
 	return app
+
+app = create_app()
+migrate = Migrate(app, db)
