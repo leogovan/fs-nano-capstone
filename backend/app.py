@@ -9,8 +9,8 @@ import sys
 from flask import Flask, flash, json, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
-from models import setup_db, Movie, Actor, RoleType, Role, Commitment, db
-from auth import AuthError, requires_auth
+from backend.models import setup_db, Movie, Actor, RoleType, Role, Commitment, db
+from backend.auth import AuthError, requires_auth
 from flask_migrate import Migrate
 
 #----------------------------------------------------------------------------#
@@ -20,7 +20,7 @@ from flask_migrate import Migrate
 def create_app(test_config=None):
 
 	app = Flask(__name__)
-	app.config.from_object('config')
+	app.config.from_object('backend.config')
 	setup_db(app)
 
 	CORS(app)
